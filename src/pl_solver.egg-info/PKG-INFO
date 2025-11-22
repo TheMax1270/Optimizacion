@@ -1,0 +1,114 @@
+Metadata-Version: 2.4
+Name: pl-solver
+Version: 0.1.0
+Summary: Linear Programming Solver with Streamlit UI
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: streamlit>=1.32.0
+Requires-Dist: plotly>=5.20.0
+Requires-Dist: scipy>=1.12.0
+Requires-Dist: sympy>=1.12.0
+Requires-Dist: pandas>=2.2.0
+Requires-Dist: numpy>=1.26.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0.0; extra == "dev"
+Requires-Dist: ruff>=0.4.0; extra == "dev"
+
+# PL Solver – Solucionador de Programación Lineal
+
+**PL Solver** es una aplicación web interactiva que permite **formular, resolver y visualizar** problemas de **Programación Lineal (PL)** con **dos o tres variables de decisión**.  
+Incluye conversión automática a forma estándar (método Big M), análisis de sensibilidad, exportación de resultados (CSV y LaTeX) y visualización en 2D/3D.
+
+---
+
+## ¿Qué puede hacer?
+
+| Funcionalidad | Descripción |
+|---------------|-------------|
+| ✅ **Entrada simbólica** | Escribe la función objetivo y restricciones como texto (`3*x1 + 2*x2 <= 10`) |
+| ✅ **Conversión Big M** | Muestra la forma estándar del problema paso a paso |
+| ✅ **Resolución óptima** | Usa `scipy.optimize.linprog` (método `highs`) |
+| ✅ **Análisis de sensibilidad** | Tabla con valores óptimos y costos reducidos |
+| ✅ **Visualización** | Gráficos 2D o 3D interactivos con **Plotly** |
+| ✅ **Exportación** | Descarga resultados en **CSV** o **LaTeX** |
+| ✅ **Dockerizado** | Ejecuta sin dependencias externas |
+
+---
+
+## Ejemplo rápido
+
+**Función objetivo**  
+```
+max 3*x1 + 2*x2
+```
+
+**Restricciones**  
+```
+2*x1 + x2 >= 10
+x1 + x2 = 8
+```
+
+**Salida**  
+- Solución óptima: `x1 = 2.0, x2 = 6.0, Z = 18.0`  
+- Gráfico 2D interactivo  
+- Archivo `resultados.csv` y `resultados.tex` listos para descargar
+
+---
+
+## 🚀 Modos de ejecución
+
+### 1. Local con **UV** (recomendado)
+
+```bash
+cd pl-solver
+
+# Crear entorno e instalar
+uv venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+uv pip install -e .
+
+# Lanzar interfaz
+streamlit run src/app.py
+```
+
+Abre [http://localhost:8501](http://localhost:8501)
+
+---
+
+### 2. Docker (sin instalar nada)
+
+```bash
+# Construir imagen
+docker build -t pl-solver .
+
+# Ejecutar
+docker run -p 8501:8501 pl-solver
+```
+
+Abre [http://localhost:8501](http://localhost:8501)
+
+## Estructura del proyecto
+
+```
+pl_solver/
+├── src/
+│   ├── app.py           # Interfaz Streamlit
+│   ├── parser.py        # Parser de texto → SymPy
+│   ├── big_m.py         # Conversión a forma estándar
+│   ├── solver.py        # Resolución con SciPy
+│   ├── visualizer.py    # Gráficos 2D/3D Plotly
+│   └── exporter.py      # Exportar CSV / LaTeX
+├── tests/               # Tests con pytest
+├── Dockerfile           # Imagen Docker
+└── pyproject.toml       # Metadatos y dependencias (PEP 621)
+```
+
+---
+
+## Requisitos mínimos
+
+| Herramienta | Versión |
+|-------------|---------|
+| Python      | 3.11+   |
+| UV          | última  |
+| Docker      | 20+     |
